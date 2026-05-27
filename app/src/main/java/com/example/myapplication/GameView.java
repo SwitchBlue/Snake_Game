@@ -17,6 +17,8 @@ public class GameView extends SurfaceView implements Runnable {
     float startX, startY;
     boolean playing = true;
     boolean gameStarted = false;
+    float foodPulse = 1.0f;
+    boolean growing = true;
 
     SurfaceHolder holder;
     Paint paint;
@@ -102,6 +104,24 @@ public class GameView extends SurfaceView implements Runnable {
 
             playing = false;
         }
+        if (growing) {
+
+            foodPulse += 0.05f;
+
+            if (foodPulse >= 1.3f) {
+
+                growing = false;
+            }
+
+        } else {
+
+            foodPulse -= 0.05f;
+
+            if (foodPulse <= 0.7f) {
+
+                growing = true;
+            }
+        }
     }
 
     private void draw() {
@@ -157,11 +177,15 @@ public class GameView extends SurfaceView implements Runnable {
             // vẽ thức ăn
             paint.setColor(Color.RED);
 
-            canvas.drawRect(
-                    food.x * tileSize,
-                    food.y * tileSize,
-                    (food.x + 1) * tileSize,
-                    (food.y + 1) * tileSize,
+            float centerX = food.x * tileSize + tileSize / 2f;
+            float centerY = food.y * tileSize + tileSize / 2f;
+
+            float radius = (tileSize / 2f) * foodPulse;
+
+            canvas.drawCircle(
+                    centerX,
+                    centerY,
+                    radius,
                     paint
             );
 
