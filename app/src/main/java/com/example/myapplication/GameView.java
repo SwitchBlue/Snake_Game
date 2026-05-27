@@ -16,6 +16,7 @@ public class GameView extends SurfaceView implements Runnable {
     Thread thread;
     float startX, startY;
     boolean playing = true;
+    boolean gameStarted = false;
 
     SurfaceHolder holder;
     Paint paint;
@@ -42,7 +43,11 @@ public class GameView extends SurfaceView implements Runnable {
 
         while (playing) {
 
-            update();
+            if (gameStarted) {
+
+                update();
+            }
+
             draw();
             sleep();
         }
@@ -107,6 +112,34 @@ public class GameView extends SurfaceView implements Runnable {
 
             canvas.drawColor(Color.BLACK);
 
+            // START MENU
+            if (!gameStarted) {
+
+                paint.setColor(Color.GREEN);
+                paint.setTextSize(120);
+
+                canvas.drawText(
+                        "SNAKE GAME",
+                        80,
+                        400,
+                        paint
+                );
+
+                paint.setColor(Color.WHITE);
+                paint.setTextSize(60);
+
+                canvas.drawText(
+                        "Tap To Start",
+                        180,
+                        600,
+                        paint
+                );
+
+                holder.unlockCanvasAndPost(canvas);
+
+                return;
+            }
+
             // vẽ rắn
             paint.setColor(Color.GREEN);
 
@@ -167,6 +200,12 @@ public class GameView extends SurfaceView implements Runnable {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (!gameStarted) {
+
+            gameStarted = true;
+
+            return true;
+        }
 
         switch (event.getAction()) {
 
