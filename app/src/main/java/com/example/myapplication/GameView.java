@@ -14,6 +14,7 @@ import java.util.Random;
 public class GameView extends SurfaceView implements Runnable {
 
     Thread thread;
+    float startX, startY;
     boolean playing = true;
 
     SurfaceHolder holder;
@@ -88,7 +89,7 @@ public class GameView extends SurfaceView implements Runnable {
             snake.remove(snake.size() - 1);
         }
 
-        // game over nếu đụng tường
+
         if (newHead.x < 0 ||
                 newHead.y < 0 ||
                 newHead.x >= 20 ||
@@ -167,16 +168,50 @@ public class GameView extends SurfaceView implements Runnable {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+        switch (event.getAction()) {
 
-            if (event.getX() > getWidth() / 2) {
+            case MotionEvent.ACTION_DOWN:
 
-                direction = "RIGHT";
+                startX = event.getX();
+                startY = event.getY();
+                break;
 
-            } else {
+            case MotionEvent.ACTION_UP:
 
-                direction = "LEFT";
-            }
+                float endX = event.getX();
+                float endY = event.getY();
+
+                float diffX = endX - startX;
+                float diffY = endY - startY;
+
+                if (Math.abs(diffX) > Math.abs(diffY)) {
+
+                    // vuốt ngang
+
+                    if (diffX > 0 && !direction.equals("LEFT")) {
+
+                        direction = "RIGHT";
+
+                    } else if (diffX < 0 && !direction.equals("RIGHT")) {
+
+                        direction = "LEFT";
+                    }
+
+                } else {
+
+                    // vuốt dọc
+
+                    if (diffY > 0 && !direction.equals("UP")) {
+
+                        direction = "DOWN";
+
+                    } else if (diffY < 0 && !direction.equals("DOWN")) {
+
+                        direction = "UP";
+                    }
+                }
+
+                break;
         }
 
         return true;
