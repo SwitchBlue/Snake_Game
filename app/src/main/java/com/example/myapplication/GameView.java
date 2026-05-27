@@ -35,7 +35,9 @@ public class GameView extends SurfaceView implements Runnable {
         super(context);
 
         holder = getHolder();
+
         paint = new Paint();
+        paint.setAntiAlias(true);
 
         snake.add(new Point(5, 5));
     }
@@ -165,22 +167,63 @@ public class GameView extends SurfaceView implements Runnable {
 
             for (Point part : snake) {
 
+                float left = part.x * tileSize;
+                float top = part.y * tileSize;
+                float right = (part.x + 1) * tileSize;
+                float bottom = (part.y + 1) * tileSize;
+
+                // glow
+                paint.setColor(Color.argb(80, 0, 255, 0));
+
                 canvas.drawRect(
-                        part.x * tileSize,
-                        part.y * tileSize,
-                        (part.x + 1) * tileSize,
-                        (part.y + 1) * tileSize,
+                        left - 10,
+                        top - 10,
+                        right + 10,
+                        bottom + 10,
+                        paint
+                );
+
+                // thân rắn
+                paint.setColor(Color.GREEN);
+
+                canvas.drawRect(
+                        left,
+                        top,
+                        right,
+                        bottom,
                         paint
                 );
             }
 
-            // vẽ thức ăn
-            paint.setColor(Color.RED);
+// vẽ thức ăn glow
 
             float centerX = food.x * tileSize + tileSize / 2f;
             float centerY = food.y * tileSize + tileSize / 2f;
 
             float radius = (tileSize / 2f) * foodPulse;
+
+// glow ngoài
+            paint.setColor(Color.argb(100, 255, 0, 0));
+
+            canvas.drawCircle(
+                    centerX,
+                    centerY,
+                    radius + 20,
+                    paint
+            );
+
+// glow giữa
+            paint.setColor(Color.argb(180, 255, 50, 50));
+
+            canvas.drawCircle(
+                    centerX,
+                    centerY,
+                    radius + 10,
+                    paint
+            );
+
+// lõi thức ăn
+            paint.setColor(Color.RED);
 
             canvas.drawCircle(
                     centerX,
