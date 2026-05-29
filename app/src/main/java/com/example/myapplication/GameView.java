@@ -10,6 +10,7 @@ import android.view.SurfaceView;
 
 import java.util.ArrayList;
 import java.util.Random;
+import com.example.myapplication.object.Portal;
 
 public class GameView extends SurfaceView implements Runnable {
 
@@ -30,6 +31,8 @@ public class GameView extends SurfaceView implements Runnable {
     String direction = "RIGHT";
 
     Point food = new Point(10, 10);
+
+    Portal portal = new Portal(2, 2, 17, 17);
 
     public GameView(Context context) {
         super(context);
@@ -80,6 +83,11 @@ public class GameView extends SurfaceView implements Runnable {
             case "RIGHT":
                 newHead.x++;
                 break;
+        }
+
+        Point teleported = portal.teleport(newHead);
+        if (teleported != null) {
+            newHead = teleported;
         }
 
         snake.add(0, newHead);
@@ -229,6 +237,23 @@ public class GameView extends SurfaceView implements Runnable {
                     centerX,
                     centerY,
                     radius,
+                    paint
+            );
+
+            // portals
+            paint.setColor(Color.BLUE);
+            canvas.drawRect(
+                    portal.position1.x * tileSize,
+                    portal.position1.y * tileSize,
+                    (portal.position1.x + 1) * tileSize,
+                    (portal.position1.y + 1) * tileSize,
+                    paint
+            );
+            canvas.drawRect(
+                    portal.position2.x * tileSize,
+                    portal.position2.y * tileSize,
+                    (portal.position2.x + 1) * tileSize,
+                    (portal.position2.y + 1) * tileSize,
                     paint
             );
 

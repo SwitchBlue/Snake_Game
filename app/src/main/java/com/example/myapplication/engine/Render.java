@@ -9,6 +9,7 @@ import android.graphics.Point;
 
 import com.example.myapplication.object.Food;
 import com.example.myapplication.object.Snake;
+import com.example.myapplication.object.Portal;
 
 public class Render {
 
@@ -17,6 +18,7 @@ public class Render {
             Paint paint,
             Snake snake,
             Food food,
+            Portal portal,
             int tileSize
     ) {
 
@@ -45,5 +47,24 @@ public class Render {
                 tileSize / 2f,
                 paint
         );
+
+        // portal
+        if (portal != null) {
+            paint.setColor(Color.BLUE);
+            canvas.drawRect(
+                    portal.position1.x * tileSize,
+                    portal.position1.y * tileSize,
+                    (portal.position1.x + 1) * tileSize,
+                    (portal.position1.y + 1) * tileSize,
+                    paint
+            );
+            canvas.drawRect(
+                    portal.position2.x * tileSize,
+                    portal.position2.y * tileSize,
+                    (portal.position2.x + 1) * tileSize,
+                    (portal.position2.y + 1) * tileSize,
+                    paint
+            );
+        }
     }
 }

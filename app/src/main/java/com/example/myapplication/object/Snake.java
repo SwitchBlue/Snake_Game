@@ -45,6 +45,41 @@ public class Snake {
         body.remove(body.size() - 1);
     }
 
+    public void move(Portal portal) {
+
+        Point head = body.get(0);
+
+        Point newHead = new Point(head.x, head.y);
+
+        switch (direction) {
+
+            case "UP":
+                newHead.y--;
+                break;
+
+            case "DOWN":
+                newHead.y++;
+                break;
+
+            case "LEFT":
+                newHead.x--;
+                break;
+
+            case "RIGHT":
+                newHead.x++;
+                break;
+        }
+
+        Point teleported = portal.teleport(newHead);
+        if (teleported != null) {
+            newHead = teleported;
+        }
+
+        body.add(0, newHead);
+
+        body.remove(body.size() - 1);
+    }
+
     public Point getHead() {
 
         return body.get(0);
