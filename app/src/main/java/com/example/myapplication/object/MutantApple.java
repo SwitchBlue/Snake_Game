@@ -18,7 +18,6 @@ public class MutantApple {
     }
 
     public void update(Point snakeHead, int numTilesX, int numTilesY, List<Point> snakeBody, Portal portal) {
-        // Tính khoảng cách đến đầu rắn
         double distance = Math.sqrt(Math.pow(position.x - snakeHead.x, 2) + Math.pow(position.y - snakeHead.y, 2));
 
         if (distance <= 5) {

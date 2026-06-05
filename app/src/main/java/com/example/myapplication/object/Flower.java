@@ -3,6 +3,7 @@ package com.example.myapplication.object;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import androidx.core.graphics.ColorUtils;
 import java.util.Random;
 
 public class Flower {
@@ -37,19 +38,22 @@ public class Flower {
         swayAngle += swaySpeed;
     }
 
-    public void draw(Canvas canvas, Paint paint, int tileSize) {
+    public void draw(Canvas canvas, Paint paint, int tileSize, float winterProgress) {
         float pSize = tileSize / 12f; 
         float currentSway = (float) Math.sin(swayAngle) * swayRange;
 
         canvas.save();
         canvas.translate(x, y);
         
-        // Làm mờ hoa (Alpha thấp để chìm vào nền)
+        // Làm mờ hoa dần và hòa vào nền tuyết trắng
         int originalAlpha = paint.getAlpha();
-        paint.setAlpha(120); 
+        int targetAlpha = (int) (120 * (1 - winterProgress)); // Hoa mờ dần khi tuyết phủ
+        if (targetAlpha < 20) targetAlpha = 20; // Giữ lại chút hình bóng hoa trắng
+        paint.setAlpha(targetAlpha); 
 
-        // 1. Vẽ cành hoa đung đưa (Stem)
-        paint.setColor(Color.rgb(10, 60, 10)); // Xanh đậm hơn
+        // Chuyển cành sang màu trắng xám khi mùa đông đến
+        int currentStemColor = ColorUtils.blendARGB(Color.rgb(10, 60, 10), Color.WHITE, winterProgress);
+        paint.setColor(currentStemColor);
         for (int i = 0; i < 4; i++) {
             float segmentOffset = (float) Math.sin(swayAngle + i * 0.2f) * (i * pSize * 0.5f);
             canvas.drawRect(-pSize/2 + segmentOffset, i * pSize, pSize/2 + segmentOffset, (i + 1) * pSize, paint);
@@ -60,15 +64,19 @@ public class Flower {
         canvas.translate(headOffset, 0);
         canvas.rotate(currentSway / 2);
 
-        // Cánh hoa Pixel
-        paint.setColor(petalColor);
+        // Chuyển màu hoa sang xanh băng giá nhạt khi mùa đông đến
+        int targetPetalColor = Color.rgb(220, 240, 255);
+        int currentPetalColor = ColorUtils.blendARGB(petalColor, targetPetalColor, winterProgress);
+        paint.setColor(currentPetalColor);
         canvas.drawRect(-pSize, -pSize * 2, pSize, -pSize, paint);
         canvas.drawRect(-pSize, pSize, pSize, pSize * 2, paint);
         canvas.drawRect(-pSize * 2, -pSize, -pSize, pSize, paint);
         canvas.drawRect(pSize, -pSize, pSize * 2, pSize, paint);
 
-        // Nhụy hoa
-        paint.setColor(centerColor);
+        // Nhụy hoa - Chuyển dần sang màu xanh băng nhạt
+        int targetCenterColor = Color.WHITE;
+        int currentCenterColor = ColorUtils.blendARGB(centerColor, targetCenterColor, winterProgress);
+        paint.setColor(currentCenterColor);
         canvas.drawRect(-pSize, -pSize, pSize, pSize, paint);
 
         paint.setAlpha(originalAlpha);

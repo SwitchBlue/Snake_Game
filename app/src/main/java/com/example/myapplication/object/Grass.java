@@ -1,7 +1,9 @@
 package com.example.myapplication.object;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import androidx.core.graphics.ColorUtils;
 import java.util.Random;
 
 public class Grass {
@@ -23,9 +25,12 @@ public class Grass {
         this.color = GRASS_COLORS[random.nextInt(GRASS_COLORS.length)];
     }
 
-    public void draw(Canvas canvas, Paint paint, float pSize, long currentTime) {
+    public void draw(Canvas canvas, Paint paint, float pSize, long currentTime, float winterProgress) {
         float sway = (float) Math.sin(currentTime / 500.0 * swaySpeed + swayOffset) * (pSize * 1.2f);
-        paint.setColor(color);
+        
+        // Chuyển màu cỏ sang xanh băng giá khi mùa đông đến
+        int currentColor = ColorUtils.blendARGB(color, Color.rgb(200, 230, 255), winterProgress);
+        paint.setColor(currentColor);
         
         // Vẽ bụi cỏ pixel (3 ngọn)
         // Ngọn giữa

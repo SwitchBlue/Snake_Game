@@ -62,8 +62,8 @@ public class Leaf {
         if (y > height + 50) reset(width, height);
     }
 
-    public void draw(Canvas canvas, Paint paint) {
-        float pSize = 4f; // Kích thước mỗi pixel của lá
+    public void draw(Canvas canvas, Paint paint, int tileSize) {
+        float pSize = tileSize / 10f; // Kích thước pixel lá dựa trên tileSize để dễ nhìn
         canvas.save();
         canvas.translate(x, y);
         canvas.rotate(angle);
@@ -72,6 +72,7 @@ public class Leaf {
             for (int j = 0; j < 8; j++) {
                 if (pattern[i][j] != 0) {
                     paint.setColor(pattern[i][j] == 1 ? baseColor : veinColor);
+                    paint.setAlpha(255); // Đảm bảo lá luôn đậm rõ nét
                     canvas.drawRect((j - 4) * pSize, (i - 4) * pSize, (j - 3) * pSize, (i - 3) * pSize, paint);
                 }
             }

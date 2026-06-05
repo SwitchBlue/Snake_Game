@@ -13,6 +13,7 @@ public class Bomb {
     private final long FUSE_TIME = 3000; // 3 giây
     public boolean exploded = false;
     public boolean finished = false;
+    public boolean soundPlayed = false; // Flag mới
     private long explosionShowTime = 500; // Hiển thị vụ nổ trong 0.5s
 
     public Bomb(Point position) {
